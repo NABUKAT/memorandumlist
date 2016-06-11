@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express": "~4.13.1"
+    "express": "~4.13.x"
   },
   "engines": {
-    "node": "0.10.41",
-    "npm": "1.4.29"
+    "node": "0.10.x",
+    "npm": "1.4.x"
   }
 }
