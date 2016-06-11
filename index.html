@@ -1,0 +1,105 @@
+﻿<!DOCTYPE HTML>
+<html ng-app="myApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+<title>覚え書きリスト</title>
+<style type="text/css">
+h2 {
+  color: blue;
+}
+table {
+  border-collapse: collapse;
+}
+.angularscope {
+  text-align: center;
+}
+td.content {
+  width: 80vw;
+  padding-left: 10px;
+  text-align: left;
+}
+td.edit {
+  width: 20vw;
+  text-align: center;
+}
+tr {
+  height: 50px;
+}
+tr.color1 {
+  background-color: #E0F2F7;
+}
+tr.color2 {
+  background-color: #A9E2F3;
+}
+div.emptymsg {
+  padding: 20px 0 20px 0;
+  color: blue;
+}
+div.addmargin {
+  height: 100px;
+}
+div.add {
+  position: absolute;
+  position: fixed;
+  bottom: 30px;
+  z-index: 1;
+  padding: 20px 10px 20px 10px;
+  background-color: rgba(255,255,255,0.5);
+}
+</style>
+</head>
+<body>
+  <div class="angularscope" ng-controller="NgController">
+    <h2>覚え書きリスト</h2>
+    <table>
+      <tr ng-repeat="l in lists track by $index" ng-class="$odd ? 'color1' : 'color2'">
+        <td class="content" ng-bind="l"></td>
+        <td class="edit">
+          <button type="button" ng-click="completed($index)">
+            完了
+          </button>
+        </td>
+      </tr>
+    </table>
+    <div class="emptymsg" ng-if="lists.length == 0">すべて完了しています。</div>
+    <div class="addmargin"></div>
+    <div class="add">
+      <input type="text" size="40" maxlength="50" ng-model="addcontent" />
+      <button type="button" ng-click="add()">追加</button>
+    </div>
+  </div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script>
+var app = angular.module('myApp', []);
+app.controller('NgController', function($scope){
+  // ローカルストレージから配列を読み出す
+  var lists = localStorage.getItem("lists");
+  $scope.lists = JSON.parse(lists);
+  // ローカルストレージに保存されてなければ配列を初期化する
+  if(lists == null){
+    $scope.lists = [];
+  }
+  // 追加する文字列
+  $scope.addcontent = "";
+
+  // 完了メソッド
+  $scope.completed = function(index){
+    // リストから完了項目を削除
+    $scope.lists.splice(index, 1);
+    // ローカルストレージに保存
+    localStorage.setItem("lists", JSON.stringify($scope.lists));
+  };
+
+  // 追加メソッド
+  $scope.add = function(){
+    if($scope.addcontent != ""){
+      $scope.lists.push($scope.addcontent);
+      $scope.addcontent = "";
+      localStorage.setItem("lists", JSON.stringify($scope.lists));
+    }
+  };
+});
+</script>
+</body>
+</html>
